@@ -1,6 +1,0 @@
-# Start at the Source
-* Difficulty: Easy
-* Problem Type: Web
-* Tools Needed: Browser Developer Tools
-## Explanation
-When you visit a website, there's a lot more going on behind the scenes than what you see on your screen. One tool to help you see that is the Developer Tools (or on Safari, it's the [Web Inspector](https://www.idownloadblog.com/2019/06/21/how-to-use-safari-web-inspector-ios-mac/) because Apple has to be different). You can look up [how to access them on your specific browser](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_are_browser_developer_tools) since it can vary. Once you've got it up, though, you'll be able to see (among many other things) the source code for the web page (you may need to click around on the tabs to find it; the tab you're looking for will vary based on the browser you're using, but you're looking for something along the lines of "Sources", "Inspector", or "Elements". While you're looking around, I encourage you to check out the other tabs, too, and find out what they do. Maybe you'll need them for a future CTF problem!). Once you can see the source code, you can either manually look around or `ctrl+F` to look for a specific phrase (like "utflag").
