@@ -15,5 +15,5 @@ Since the prime is very small, we can simply brute force to find the secret valu
 191 7
 ```
 
-Alice’s secret is 191, while Bob’s is 7. Their secret can be computed in multiple ways: g^(ab), (g^a)^b, and (g^b)^a are all equivalent.
+Alice’s secret is 191, while Bob’s is 7. Their secret can be computed in multiple ways: g^(ab), A^b, and B^a are all equivalent.
 
