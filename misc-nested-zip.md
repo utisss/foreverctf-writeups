@@ -6,7 +6,8 @@
 
 ## Solution
 This is just a lot of nested ZIP files. Use a script to open them up. There's an example script:
-```import os
+```python
+import os
 from zipfile import ZipFile
 
 ZIP_NAME = 'flag.zip'
