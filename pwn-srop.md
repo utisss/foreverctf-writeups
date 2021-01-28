@@ -105,7 +105,7 @@ frame will look something like this. We will also append a pointer to the
 After this ropchain executes, we'll call `execve('/bin/sh', {'/bin/sh', NULL}, NULL)`.
 
 Here's the code
-```
+```python
 from pwn import *
 
 r = process("./srop")
