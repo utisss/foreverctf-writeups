@@ -21,6 +21,7 @@ new_hash = b*old_hash + flag[i]
 And thus, we can derive the following values, assuming we know b:
 
 flag[i] = new_hash%b
+
 old_hash = new_hash//b
 
 However, obviously we need to find which b was used to create the hash. If any message was hashed, this would be pretty hard. Fortunately, we know that flags always end in }, which has ascii code 125. Thus, we know that hash%b = 125. We can try values of b until one yields hash%b = 125, and attempt to reverse the hash that way. Since the flag also must start with utflag{, we can easily tell if the b we chose was correct.
