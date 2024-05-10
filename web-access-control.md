@@ -13,4 +13,6 @@ the flag.
 I only trust code that I wrote, so I completely implemented my own authentication for my new website!
 Try to break in if you can!
 
+`http://forever.isss.io:1234`
+
 _by danny @danny_
