@@ -24,7 +24,6 @@ cookies to my remote server through an HTTP request:
 
 Finally, the flag appears in my `nc` console. 
 
-Option 2:
-
+#### Option 2:
 - use webhook.site or any other service that can listen in
 - apply the payload as before with the updated address and the flag will appear in the get request
