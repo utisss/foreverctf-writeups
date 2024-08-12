@@ -15,12 +15,12 @@ SELECT username FROM users WHERE email = '____________'
 
 If we input an email of:
 ```
-' UNION SELECT password FROM users; -- 
+' OR 1=1 UNION select password from users--
 ```
 
 Then the SQL command looks like:
 ```
-SELECT username FROM users WHERE email = '' UNION SELECT password FROM users; -- 
+SELECT username FROM users WHERE email = '' OR 1=1 UNION select password from users--
 
 ```
 
